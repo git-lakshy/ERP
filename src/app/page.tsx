@@ -2,8 +2,30 @@ import Link from "next/link";
 import { Package } from "lucide-react";
 
 export default function Home() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Sellable ERP",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": "Modular, Multi-tenant ERP Platform for SMEs.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Sellable Inc."
+    }
+  };
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-zinc-950 text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="flex flex-col items-center gap-6 text-center">
         <div className="rounded-full bg-red-600/10 p-4 border border-red-600/20">
           <Package className="h-12 w-12 text-red-600" />

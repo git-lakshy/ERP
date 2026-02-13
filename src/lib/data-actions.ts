@@ -27,7 +27,35 @@ export async function ensureUserAndOrg() {
         return dbUser
     }
 
-    // User doesn't exist, create new Organization and User
+    // Check if user is an existing Employee in any organization
+    // @ts-ignore
+    const existingEmployee = await prisma.employee.findFirst({
+        where: { email: user.email! }
+    })
+
+    if (existingEmployee) {
+        console.log("ensureUserAndOrg: Found existing employee record, linking to Org", existingEmployee.organizationId)
+        try {
+            const newUser = await prisma.user.create({
+                data: {
+                    id: user.id,
+                    email: user.email!,
+                    organizationId: existingEmployee.organizationId,
+                    role: 'EMPLOYEE'
+                },
+                include: { organization: true }
+            })
+            return newUser
+        } catch (e: any) {
+            if (e.code === 'P2002') {
+                // Race condition, user already created
+                return prisma.user.findUnique({ where: { id: user.id }, include: { organization: true } })
+            }
+            throw e
+        }
+    }
+
+    // User doesn't exist and is NOT an employee, create new Organization and User
     // Generate a simple registration number (6 digits)
     const regNum = Math.floor(100000 + Math.random() * 900000)
     const orgName = `ERP ${regNum}`
@@ -51,7 +79,11 @@ export async function ensureUserAndOrg() {
         })
     } catch (e: any) {
         if (e.code === 'P2002') {
-            console.log("ensureUserAndOrg: Race condition detected - user/org already created by parallel request")
+            const existingUser = await prisma.user.findUnique({
+                where: { id: user.id },
+                include: { organization: true }
+            })
+            return existingUser
         } else {
             console.error("ensureUserAndOrg: Error creating Org/User", e)
             throw e

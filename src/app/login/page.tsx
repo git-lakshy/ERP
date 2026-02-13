@@ -14,21 +14,12 @@ function LoginForm() {
         <div className="flex min-h-screen items-center justify-center bg-zinc-950 px-4 py-12 sm:px-6 lg:px-8">
             <div className="w-full max-w-md space-y-8">
                 <div>
-                    <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-600/10 text-red-600">
-                        <svg
-                            className="h-10 w-10"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M13 10V3L4 14h7v7l9-11h-7z"
-                            />
-                        </svg>
+                    <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full overflow-hidden bg-white/5 p-3">
+                        <img
+                            src="/logo.svg"
+                            alt="Custom ERP Logo"
+                            className="h-full w-full object-contain"
+                        />
                     </div>
                     <h2 className="mt-6 text-center text-3xl font-extrabold tracking-tight text-white">
                         Sign in to <span className="text-red-600">Custom ERP</span>

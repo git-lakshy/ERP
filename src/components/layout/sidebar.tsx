@@ -32,8 +32,12 @@ export function Sidebar({ brandSymbol, orgName }: { brandSymbol?: string, orgNam
     return (
         <div className="flex h-full w-64 flex-col border-r border-zinc-800 bg-zinc-950">
             <div className="flex h-16 items-center gap-2 px-6 border-b border-zinc-800">
-                <div className="flex h-8 w-8 items-center justify-center rounded bg-red-600 text-white">
-                    <span className="font-bold uppercase">{displayBrand.substring(0, 3)}</span>
+                <div className="flex h-8 w-8 items-center justify-center">
+                    <img
+                        src="/logo.svg"
+                        alt="Logo"
+                        className="h-full w-full object-contain"
+                    />
                 </div>
                 <span className="font-bold text-lg tracking-tight truncate">
                     <span className="text-white">{displayName.split(' ')[0]}</span>

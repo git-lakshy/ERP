@@ -22,6 +22,11 @@ export default async function SettingsPage() {
                     </h2>
 
                     <form action={updateOrganizationSettings} className="space-y-4">
+                        {user.role === 'EMPLOYEE' && (
+                            <div className="rounded-md bg-gray-500/10 p-3 border border-gray-500/20 mb-4">
+                                <p className="text-xs text-gray-400 text-center font-medium tracking-wide"> View only mode contact <b className="text-red-600">ADMIN</b> to edit.</p>
+                            </div>
+                        )}
                         <div className="grid gap-4 py-4">
                             <div className="grid grid-cols-4 items-center gap-4">
                                 <label htmlFor="name" className="text-right text-sm text-zinc-400">
@@ -31,22 +36,23 @@ export default async function SettingsPage() {
                                     id="name"
                                     name="name"
                                     defaultValue={user?.organization?.name}
-                                    className="col-span-3 rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-white focus:border-red-600 outline-none"
+                                    disabled={user.role === 'EMPLOYEE'}
+                                    className="col-span-3 rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-white focus:border-red-600 outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                                 />
                             </div>
                             <div className="grid grid-cols-4 items-center gap-4">
-                                <label htmlFor="brandSymbol" className="text-right text-sm text-zinc-400">
+                                <label className="text-right text-sm text-zinc-400">
                                     Brand Symbol
                                 </label>
                                 <input
-                                    id="brandSymbol"
+                                    type="hidden"
                                     name="brandSymbol"
-                                    maxLength={3}
-                                    placeholder="e.g. ERP"
                                     defaultValue={(user?.organization as any)?.brandSymbol || ''}
-                                    className="col-span-3 rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-white focus:border-red-600 outline-none uppercase"
                                 />
-                                <p className="col-start-2 col-span-3 text-[10px] text-zinc-500">Max 3 characters. Appears in the sidebar.</p>
+                                <div className="col-span-3 rounded-md border border-zinc-800 bg-zinc-900/50 px-3 py-2 text-sm text-zinc-300 font-mono uppercase">
+                                    {(user?.organization as any)?.brandSymbol || 'ERP'}
+                                </div>
+                                <p className="col-start-2 col-span-3 text-[10px] text-zinc-500">Contact admin to change.</p>
                             </div>
                             <div className="grid grid-cols-4 items-center gap-4">
                                 <label htmlFor="currency" className="text-right text-sm text-zinc-400">
@@ -56,7 +62,8 @@ export default async function SettingsPage() {
                                     id="currency"
                                     name="currency"
                                     defaultValue={(user?.organization as any)?.currency || 'USD'}
-                                    className="col-span-3 rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-white focus:border-red-600 outline-none"
+                                    disabled={user.role === 'EMPLOYEE'}
+                                    className="col-span-3 rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-white focus:border-red-600 outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     <option value="USD">Dollar ($)</option>
                                     <option value="EUR">Euro (€)</option>
@@ -74,11 +81,13 @@ export default async function SettingsPage() {
                             </div>
                         </div>
 
-                        <div className="pt-4">
-                            <button type="submit" className="rounded-md bg-white/10 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 focus:ring-offset-zinc-900 transition-all">
-                                Save Changes
-                            </button>
-                        </div>
+                        {user.role !== 'EMPLOYEE' && (
+                            <div className="pt-4">
+                                <button type="submit" className="rounded-md bg-white/10 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 focus:ring-offset-zinc-900 transition-all">
+                                    Save Changes
+                                </button>
+                            </div>
+                        )}
                     </form>
                 </div>
 

@@ -70,54 +70,66 @@ export default async function EmployeePage() {
                     </div>
                 </div>
 
-                {/* Add Employee Form */}
+                {/* Add Employee Form (Hidden for Employees) */}
                 <div className="lg:col-span-1">
-                    <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-6 sticky top-8">
-                        <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                            <UserPlus className="h-5 w-5 text-red-600" />
-                            Onboard Talent
-                        </h2>
-                        <form action={createEmployee} className="space-y-4">
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                    <label htmlFor="firstName" className="text-xs font-medium text-zinc-400 uppercase">First Name</label>
-                                    <input required name="firstName" id="firstName" className="w-full rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-red-600/50" />
+                    {user?.role !== 'EMPLOYEE' ? (
+                        <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-6 sticky top-8">
+                            <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                                <UserPlus className="h-5 w-5 text-red-600" />
+                                Onboard Employees
+                            </h2>
+                            <form action={createEmployee} className="space-y-4">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label htmlFor="firstName" className="text-xs font-medium text-zinc-400 uppercase">First Name</label>
+                                        <input required name="firstName" id="firstName" className="w-full rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-red-600/50" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label htmlFor="lastName" className="text-xs font-medium text-zinc-400 uppercase">Last Name</label>
+                                        <input required name="lastName" id="lastName" className="w-full rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-red-600/50" />
+                                    </div>
                                 </div>
-                                <div className="space-y-2">
-                                    <label htmlFor="lastName" className="text-xs font-medium text-zinc-400 uppercase">Last Name</label>
-                                    <input required name="lastName" id="lastName" className="w-full rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-red-600/50" />
-                                </div>
-                            </div>
 
-                            <div className="space-y-2">
-                                <label htmlFor="email" className="text-xs font-medium text-zinc-400 uppercase">Email Address</label>
-                                <input required type="email" name="email" id="email" className="w-full rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-red-600/50" />
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <label htmlFor="role" className="text-xs font-medium text-zinc-400 uppercase">Role</label>
-                                    <input required name="role" id="role" placeholder="e.g. Developer" className="w-full rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-red-600/50" />
+                                    <label htmlFor="email" className="text-xs font-medium text-zinc-400 uppercase">Email Address</label>
+                                    <input required type="email" name="email" id="email" className="w-full rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-red-600/50" />
                                 </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label htmlFor="role" className="text-xs font-medium text-zinc-400 uppercase">Role</label>
+                                        <input required name="role" id="role" placeholder="e.g. Developer" className="w-full rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-red-600/50" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label htmlFor="department" className="text-xs font-medium text-zinc-400 uppercase">Department</label>
+                                        <input required name="department" id="department" placeholder="e.g. Engineering" className="w-full rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-red-600/50" />
+                                    </div>
+                                </div>
+
                                 <div className="space-y-2">
-                                    <label htmlFor="department" className="text-xs font-medium text-zinc-400 uppercase">Department</label>
-                                    <input required name="department" id="department" placeholder="e.g. Engineering" className="w-full rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-red-600/50" />
+                                    <label htmlFor="salary" className="text-xs font-medium text-zinc-400 uppercase">Annual Compensation</label>
+                                    <div className="relative">
+                                        <span className="absolute left-3 top-2 text-zinc-500">{currency}</span>
+                                        <input required type="number" step="0.01" name="salary" id="salary" className="w-full rounded-md border border-zinc-800 bg-zinc-950 pl-7 pr-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-red-600/50" />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="space-y-2">
-                                <label htmlFor="salary" className="text-xs font-medium text-zinc-400 uppercase">Annual Compensation</label>
-                                <div className="relative">
-                                    <span className="absolute left-3 top-2 text-zinc-500">{currency}</span>
-                                    <input required type="number" step="0.01" name="salary" id="salary" className="w-full rounded-md border border-zinc-800 bg-zinc-950 pl-7 pr-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-red-600/50" />
-                                </div>
+                                <button type="submit" className="w-full rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 focus:ring-offset-zinc-900 transition-all">
+                                    Add Employee
+                                </button>
+                            </form>
+                        </div>
+                    ) : (
+                        <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-6 sticky top-8 text-center space-y-3">
+                            <div className="h-12 w-12 bg-zinc-800 rounded-full flex items-center justify-center mx-auto text-zinc-500">
+                                <UserPlus className="h-6 w-6" />
                             </div>
-
-                            <button type="submit" className="w-full rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 focus:ring-offset-zinc-900 transition-all">
-                                Add Employee
-                            </button>
-                        </form>
-                    </div>
+                            <div>
+                                <h3 className="text-sm font-medium text-white">Restricted Access</h3>
+                                <p className="text-xs text-zinc-500 mt-1">Only Administrators and Managers can onboard new talent.</p>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
