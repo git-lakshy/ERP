@@ -1,0 +1,122 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// Multi-tenant Schema
+
+model Organization {
+  id        String   @id @default(uuid())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  users     User[]
+  products  Product[]
+  employees Employee[]
+  financeTransactions FinanceTransaction[]
+  
+  currency    String @default("USD") // Or "$" symbol directly
+  brandSymbol String? @default("S") // Max 3 chars
+
+  @@index([slug])
+}
+
+model User {
+  id             String       @id @default(uuid()) // Links to Supabase Auth ID
+  email          String       @unique
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  role           Role         @default(EMPLOYEE)
+  createdAt      DateTime     @default(now())
+
+  @@index([organizationId])
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  MANAGER
+  EMPLOYEE
+}
+
+// Inventory Module
+
+model Product {
+  id             String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  name           String
+  description    String?
+  sku            String
+  price          Decimal  @default(0.00)
+  quantity       Int      @default(0)
+  transactions   Transaction[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([organizationId, sku]) // SKU must be unique per org
+  @@index([organizationId])
+}
+
+model Transaction {
+  id        String   @id @default(uuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  type      TxType
+  quantity  Int
+  date      DateTime @default(now())
+  notes     String?
+
+  @@index([productId])
+}
+
+enum TxType {
+  IN
+  OUT
+  ADJUSTMENT
+}
+
+// HRM Module
+
+model Employee {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  firstName      String
+  lastName       String
+  email          String
+  role           String       @default("Staff") // e.g. Manager, Developer, Analyst
+  department     String       @default("General")
+  salary         Decimal      @default(0.00)
+  joinedAt       DateTime     @default(now())
+  
+  @@index([organizationId])
+}
+
+// Finance Module
+
+model FinanceTransaction {
+  id             String        @id @default(uuid())
+  organizationId String
+  organization   Organization  @relation(fields: [organizationId], references: [id])
+  amount         Decimal
+  type           FinanceTxType
+  category       String        // e.g. Sales, Rent, Payroll, Utilities
+  description    String?
+  date           DateTime      @default(now())
+  
+  @@index([organizationId])
+}
+
+enum FinanceTxType {
+  INCOME
+  EXPENSE
+}

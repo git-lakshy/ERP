@@ -1,0 +1,59 @@
+// Single Tenant Schema Variation
+// Use this schema for standalone/single-client deployments.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// Single Tenant - No Organization Model
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  EMPLOYEE
+}
+
+// Inventory Module
+
+model Product {
+  id           String        @id @default(uuid())
+  name         String
+  description  String?
+  sku          String        @unique // Unique globally as there is only one tenant
+  price        Decimal       @default(0.00)
+  quantity     Int           @default(0)
+  transactions Transaction[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Transaction {
+  id        String   @id @default(uuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  type      TxType
+  quantity  Int
+  date      DateTime @default(now())
+  notes     String?
+
+  @@index([productId])
+}
+
+enum TxType {
+  IN
+  OUT
+  ADJUSTMENT
+}
