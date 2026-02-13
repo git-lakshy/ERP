@@ -7,12 +7,12 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    default: "Sellable ERP | Enterprise Resource Planning",
-    template: "%s | Sellable ERP",
+    default: "Custom ERP | Enterprise Resource Planning",
+    template: "%s | Custom ERP",
   },
   description: "Modular, Multi-tenant ERP Platform for SMEs. Manage inventory, HR, finance, and more with ease.",
-  applicationName: "Sellable ERP",
-  authors: [{ name: "Sellable ERP Team" }],
+  applicationName: "Custom ERP",
+  authors: [{ name: "Custom ERP Team" }],
   keywords: ["ERP", "Enterprise Resource Planning", "SME", "Business Management", "Inventory", "HR", "Finance"],
   creator: "Sellable Team",
   publisher: "Sellable Inc.",

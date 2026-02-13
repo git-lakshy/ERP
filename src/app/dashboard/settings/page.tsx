@@ -61,7 +61,7 @@ export default async function SettingsPage() {
                                 <select
                                     id="currency"
                                     name="currency"
-                                    defaultValue={(user?.organization as any)?.currency || 'USD'}
+                                    defaultValue={(user?.organization as any)?.currency || 'INR'}
                                     disabled={user.role === 'EMPLOYEE'}
                                     className="col-span-3 rounded-md border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-white focus:border-red-600 outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
